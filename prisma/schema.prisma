@@ -10,11 +10,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 model User {
-  id        Int @id @default(autoincrement())
-  name      String
-  email     String
-  password  String
-  phone     String @db.VarChar(20)
-  cpf       String @db.VarChar(20)
+  id                Int           @id @default(autoincrement())
+  name              String      
+  email             String        @unique
+  password          String      
+  phone             String        @db.VarChar(20)
+  cpf               String        @db.VarChar(20)
+  role              Role          @default(USER)
+  active            Int           @default(1)
+  createdUsersCount Int           @default(0)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @default(now())
+
+  createdUsers      CreatedUser[] @relation("user")
+  createdBy         CreatedUser[] @relation("createdBy")
+}
+
+model CreatedUser {
+  user         User  @relation("user", fields: [userId], references: [id], onDelete: Cascade)
+  userId       Int
+
+  createdBy    User @relation("createdBy", fields: [createdById], references: [id], onDelete: Cascade)
+  createdById  Int
+
+  @@id([userId, createdById])
 }
