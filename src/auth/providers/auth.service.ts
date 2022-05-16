@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { Role, User } from '@prisma/client';
 import CreateUserDto from 'src/users/dto/create-user.dto';
 import bcrypt = require('bcrypt')
 import { PrismaService } from 'src/database/prisma.service';
@@ -22,18 +22,27 @@ export class AuthService {
   }
 
   async register(userData: CreateUserDto) {
+    const count = await this.prisma.user.count()
     let user: User = await this.prisma.user.findUnique({
       where: { email: userData.email }
     })
     if (user) throw new BadRequestException('Email already in use')
 
     userData.password = await bcrypt.hash(userData.password, await bcrypt.genSalt())
-    user = await this.prisma.user.create({ data: userData })
+    user = await this.prisma.user.create({ data: {
+      ...userData,
+      role: count === 0 ? Role.ADMIN : Role.USER
+    }})
 
     return {
       statusCode: 200,
       message: 'User registered successfully',
-      access_token: this.jwtService.sign({ id: user.id, email: user.email  }),
+      access_token: this.jwtService.sign({
+        id: user.id,
+        email: user.email,
+        username: user.name,
+        role: user.role 
+      }),
     }
   }
 }
