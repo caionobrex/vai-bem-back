@@ -21,3 +21,7 @@ Terceiro, accesse a CLI do container "vai-bem-back" e rode "yarn prisma migrate 
 migrations do Prisma.
 
 ![Alt text](https://i.ibb.co/LJnPWrN/Screenshot-3.png "Demonstração")
+
+Quarto, acesse o app em localhost:3000
+
+PS: O primeiro usuário sempre será um ADMIN
