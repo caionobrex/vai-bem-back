@@ -17,4 +17,7 @@ Segundo, build a imagem de multi-containers com docker-compose:
   docker-compose up | docker-compose up -d
 ```
 
-Terceiro, accesse o app em localhost:3000
+Terceiro, accesse a CLI do container "vai-bem-back" e rode "yarn prisma migrate deploy" para executar as 
+migrations do Prisma.
+
+![Alt text](https://i.ibb.co/LJnPWrN/Screenshot-3.png "Demonstração")
