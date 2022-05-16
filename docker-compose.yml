@@ -1,0 +1,34 @@
+version: '3.7'
+services:
+  vai-bem-back:
+    container_name: vai-bem-back
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3001
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+
+  postgres:
+    image: postgres:14
+    container_name: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  vai-bem-front:
+    image: nobrex/vai-bem-front
+    container_name: vai-bem-front
+    ports:
+      - 3000:3000
+
+volumes:
+  postgres:
+    name: nest-db
