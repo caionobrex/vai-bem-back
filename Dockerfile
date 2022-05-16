@@ -6,5 +6,5 @@ RUN yarn install
 RUN yarn prisma generate
 COPY . .
 RUN yarn run build
-EXPOSE 8080
+EXPOSE 3001
 CMD [ "node", "dist/main" ]
